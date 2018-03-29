@@ -50,6 +50,11 @@ public class BaseModel implements Serializable{
 	@Enumerated
 	//@Result(typeHandler=MyEnumOrdinalTypeHandler.class,javaType=BaseModelStatus.class,column="status")
 	private EnumConstants.BaseModelStatus status = BaseModelStatus.NORMAL;
+
+	/**
+	 * 备用字段
+	 */
+	private String spare;
 	
 	public Date getCreateTime() {
 		return createTime;
@@ -92,5 +97,13 @@ public class BaseModel implements Serializable{
 
 	public void setStatus(EnumConstants.BaseModelStatus status) {
 		this.status = status;
+	}
+
+	public String getSpare() {
+		return spare;
+	}
+
+	public void setSpare(String spare) {
+		this.spare = spare;
 	}
 }
