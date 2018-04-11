@@ -111,6 +111,7 @@
 			<value>
 				/ = anon
 				/index = anon
+				/createClass = anon
 				/order = anon
 				/admin/order/add = anon
 				/login = authc

@@ -451,7 +451,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-                    <port>8081</port>
+                    <port>8079</port>
 					<systemProperties>
 						<spring.profiles.active>production</spring.profiles.active>
 					</systemProperties>

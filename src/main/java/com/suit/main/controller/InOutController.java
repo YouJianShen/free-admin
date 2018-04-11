@@ -24,8 +24,6 @@ import com.suit.util.JsonUtil;
 @Controller
 @RequestMapping(value = "inout")
 public class InOutController extends BaseController<InOut> {
-	private static final Logger logger = LoggerFactory
-			.getLogger(SysUserController.class);
 
 	@Autowired
 	private InOutService inOutService;

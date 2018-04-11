@@ -11,7 +11,7 @@ public class EnumConstants {
 	/**
 	 * 基础类的状态枚举
 	 * 
-	 * @author hsy
+	 * @author syj
 	 * 
 	 */
 	public static enum BaseModelStatus {
@@ -143,5 +143,44 @@ public class EnumConstants {
 		 * 宿舍
 		 */
 		DORM
+	}
+
+	/**
+	 *  属性类型
+	 */
+	public enum AttributeType{
+		INT("int",11),
+		STRING("String",20),
+		BOOLEAN("boolean",0),
+//		LONG("long",22),
+		FLOAT("float",0),
+		DOUBLE("double",0),
+		DATE("date",0),
+		TIME("time",0),
+		DATETIME("datetime",0);
+
+		private String name;
+		private int length;
+
+		public int getLength() {
+			return length;
+		}
+
+		public void setLength(int length) {
+			this.length = length;
+		}
+
+		private AttributeType(String name, int length){
+			this.name = name;
+			this.length = length;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 }
