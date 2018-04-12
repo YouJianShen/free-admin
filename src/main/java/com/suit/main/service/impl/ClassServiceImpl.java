@@ -8,11 +8,13 @@ import com.suit.jpa.core.BaseDao;
 import com.suit.main.Attribute;
 import com.suit.main.Class;
 import com.suit.main.dao.ClassDao;
+import com.suit.main.service.AttributeService;
 import com.suit.main.service.ClassService;
 import com.suit.model.core.common.EnumConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,12 +27,27 @@ public class ClassServiceImpl extends BaseServiceImpl<Class> implements ClassSer
     private ClassDao classDao;
 
     @Autowired
+    private AttributeService attributeService;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public void addDBClass(Class classInfo) throws CoreException {
+        if (findUniqueBy("name", classInfo.getName()) == null) {
+            classInfo = classDao.save(classInfo);
+            attributeService.createAttributes(classInfo.getAttributes(), classInfo.getId());
+            createDB(classInfo);
+        } else {
+            throw new CoreException("已存在名称为" + classInfo.getName() + "的栏目");
+        }
+    }
 
     @Override
     @Transactional(readOnly = false)
     public void createDB(Class classInfo) throws CoreException {
-        String sql = "create table if not exists '" + classInfo.getName() + "'(";
+        String sql = "create table if not exists model_" + classInfo.getName() + "(";
 
         List<Attribute> listAttr = classInfo.getAttributes();
 
@@ -39,7 +56,7 @@ public class ClassServiceImpl extends BaseServiceImpl<Class> implements ClassSer
 
         for (int i = 0; i < listAttr.size(); i++) {
             Attribute item = listAttr.get(i);
-            sql += "'" + item.getName() + "' ";
+            sql += "" + item.getName() + " ";
             switch (item.getType()) {
                 case INT:
                     sql += EnumConstants.AttributeType.INT.getName() + "(" + EnumConstants.AttributeType.INT.getLength() + ")";
@@ -60,20 +77,24 @@ public class ClassServiceImpl extends BaseServiceImpl<Class> implements ClassSer
                     sql += EnumConstants.AttributeType.DOUBLE.getName();
                     break;
                 case STRING:
-                    sql += EnumConstants.AttributeType.STRING.getName() + "(" + item.getLength() == null ? EnumConstants.AttributeType.STRING.getLength() : item.getLength() + ")";
+                    sql += EnumConstants.AttributeType.STRING.getName() + "(" + item.getLength() == null ? EnumConstants.AttributeType.STRING.getLength() : item.getLength();
                     break;
                 case BOOLEAN:
-                    sql += EnumConstants.AttributeType.DOUBLE.getName();
+                    sql += EnumConstants.AttributeType.BOOLEAN.getName();
+                    break;
+                default:
+                    sql += "varchar(20) default ''";
                     break;
             }
 
-            if(!item.isAllowNull()){
+            if (!item.isAllowNull()) {
                 sql += " not null";
             }
 
-            sql += " default " + item.getDefaultValue() + ",";
+            sql += " default " + item.getDefaultValue() + "),";
         }
 
+        sql = sql.substring(0, sql.length() - 1) + ";";
 
         jdbcTemplate.execute(sql);
     }

@@ -18,7 +18,7 @@ public class Class extends BaseModel {
     /**
      * 类名称
      */
-    @Column(name="name",length = 40)
+    @Column(name="name",length = 40,unique = true)
     private String name;
 
     /**

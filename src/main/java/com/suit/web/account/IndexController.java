@@ -66,7 +66,7 @@ public class IndexController {
                 WebConstant.COMMON_SUCCESS_MSG);
 
         try{
-            classService.createDB(classInfo);
+            classService.addDBClass(classInfo);
         }catch (CoreException e){
             logger.info(e.getMessage());
             e.printStackTrace();
