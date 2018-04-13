@@ -40,7 +40,7 @@ public class ClassServiceImpl extends BaseServiceImpl<Class> implements ClassSer
             attributeService.createAttributes(classInfo.getAttributes(), classInfo.getId());
             createDB(classInfo);
         } else {
-            throw new CoreException("已存在名称为" + classInfo.getName() + "的栏目");
+            throw new CoreException("0","已存在名称为" + classInfo.getName() + "的栏目");
         }
     }
 
