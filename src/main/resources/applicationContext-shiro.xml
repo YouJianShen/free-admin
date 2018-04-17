@@ -110,6 +110,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/ = anon
+				/enum = anon
 				/index = anon
 				/createClass = anon
 				/order = anon

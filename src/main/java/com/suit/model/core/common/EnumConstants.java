@@ -1,5 +1,7 @@
 package com.suit.model.core.common;
 
+import java.io.Serializable;
+
 /**
  * 所有的枚举常量
  * 
@@ -170,7 +172,7 @@ public class EnumConstants {
 			this.length = length;
 		}
 
-		private AttributeType(String name, int length){
+		AttributeType(String name, int length){
 			this.name = name;
 			this.length = length;
 		}

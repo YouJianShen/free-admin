@@ -8,10 +8,13 @@ package com.suit.web.account;
 import com.suit.core.constant.WebConstant;
 import com.suit.core.exception.CoreException;
 import com.suit.core.tool.BaseController;
+import com.suit.core.util.SystemUtil;
 import com.suit.core.web.vo.OperateStatus;
 import com.suit.main.service.ClassService;
+import com.suit.model.core.common.EnumConstants;
 import com.suit.system.core.service.SysUserService;
 import com.suit.util.JsonUtil;
+import net.sf.json.JSONArray;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.suit.main.Class;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -60,14 +62,42 @@ public class IndexController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "createClass",method = RequestMethod.POST)
-    public String createClass(HttpServletRequest request,Class classInfo){
+    @RequestMapping(value = "createClass", method = RequestMethod.POST)
+    public String createClass(HttpServletRequest request, com.suit.main.Class classInfo) {
         OperateStatus status = new OperateStatus(true,
                 WebConstant.COMMON_SUCCESS_MSG);
 
-        try{
+        try {
             classService.addDBClass(classInfo);
-        }catch (CoreException e){
+        } catch (CoreException e) {
+            logger.info(e.getMessage());
+            e.printStackTrace();
+            status.setSuccess(false);
+            status.setMsg(e.getMessage());
+        }
+
+        return JsonUtil.genJson(status);
+    }
+
+
+    /**
+     * enum实体获取
+     * @param request
+     * @param name
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "enum", method = RequestMethod.POST)
+    public String getEnum(HttpServletRequest request, String name) {
+        OperateStatus status = new OperateStatus(true,
+                WebConstant.COMMON_SUCCESS_MSG);
+
+        try {
+            String packageName = EnumConstants.class.getPackage() + ".EnumConstants$" + name;
+            Class cls = EnumConstants.class.forName(packageName.replace("package ",""));
+            JSONArray json = SystemUtil.genEnumJOSN(cls);
+            status.setData(json);
+        } catch (ClassNotFoundException e) {
             logger.info(e.getMessage());
             e.printStackTrace();
             status.setSuccess(false);

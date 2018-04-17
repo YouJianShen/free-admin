@@ -3,6 +3,7 @@ package com.suit.core.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.suit.core.socket.SocketClient;
 import com.suit.core.socket.SocketService;
 import com.suit.core.websocket.WsServer;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -206,7 +208,20 @@ public class SystemUtil {
             e1.printStackTrace();
         }
         return null;
+    }
 
+    /**
+     * enum转jsonArray
+     * @param _class
+     * @return
+     */
+    public static JSONArray genEnumJOSN(Class _class){
+        JSONArray array = new JSONArray();
+
+        for (Field field: _class.getFields()){
+            array.add(field.getName());
+        }
+        return array;
     }
 
 }
