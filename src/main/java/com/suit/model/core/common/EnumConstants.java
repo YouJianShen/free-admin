@@ -150,7 +150,7 @@ public class EnumConstants {
 	/**
 	 *  属性类型
 	 */
-	public enum AttributeType{
+	public enum AttributeType implements Serializable{
 		INT("int",11),
 		STRING("String",20),
 		BOOLEAN("boolean",0),

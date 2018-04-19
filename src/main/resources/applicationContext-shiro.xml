@@ -109,7 +109,7 @@
 				/websocket*= anon-->
 		<property name="filterChainDefinitions">
 			<value>
-				/ = anon
+				/* = anon
 				/enum = anon
 				/index = anon
 				/createClass = anon

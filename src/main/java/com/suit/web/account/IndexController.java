@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * LoginController负责打开登录页面(GET请求)和登录出错页面(POST请求)，
@@ -79,6 +80,28 @@ public class IndexController {
         return JsonUtil.genJson(status);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "getClass", method = RequestMethod.GET)
+    public String getClass(HttpServletRequest request, String id) {
+        OperateStatus status = new OperateStatus(true,
+                WebConstant.COMMON_SUCCESS_MSG);
+
+        try {
+            if(id.equals("")){
+                List<com.suit.main.Class> datas = classService.getAll();
+                status.setData(JSONArray.fromObject(datas));
+            }else{
+                status.setData(classService.findUniqueBy("id",id));
+            }
+        } catch (CoreException e) {
+            logger.info(e.getMessage());
+            e.printStackTrace();
+            status.setSuccess(false);
+            status.setMsg(e.getMessage());
+        }
+
+        return JsonUtil.genJson(status);
+    }
 
     /**
      * enum实体获取
